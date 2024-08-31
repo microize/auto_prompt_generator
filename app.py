@@ -210,14 +210,6 @@ def home_main_page_content(open_ai_key):
 
 # MAIN FUNCTION
 if __name__ == "__main__":
-    
-    # BANNER IMAGE
-    st.markdown("")
-    col_ctnr_Image_a, col_ctnr_Image_b,col_ctnr_Image_c  = st.columns([2,4,2],gap="medium")
-    with col_ctnr_Image_b:
-        st.image('banner_image_2.png',use_column_width=True)
-    st.markdown("---")
-    st.markdown("")
 
     # SIDE BAR
     open_ai_key = home_sidebar_content()
