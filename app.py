@@ -8,48 +8,20 @@ from crewai import Agent, Task, Crew
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_core.prompts import PromptTemplate, ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import StrOutputParser
+from dotenv import load_dotenv
 
-os.environ['OPENAI_API_KEY'] = 'sk-xxxxxxxxxxxxxxxxxxxxxxxx'
+load_dotenv()
+
+
+os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
 os.environ['OPENAI_API_MODEL'] = 'gpt-4o-mini-2024-07-18'
 
 # CSS TO HIDE THE STREAMLIT MENU
 hide_menu = """<style> p {font-weight: 600;} div.block-container{padding-top:3rem;padding-bottom:3rem;} header{ visibility: hidden; } footer{ visibility: hidden; } </style> """
 
 # CONFIGURE STREAMLIT PAGE SETTINGS
-st.set_page_config(page_title="j33ni.ai",layout="wide",initial_sidebar_state="auto",page_icon='custom_2.png')
+st.set_page_config(page_title="j33ni.ai",layout="wide",initial_sidebar_state="auto",page_icon='🔧')
 #st.markdown(hide_menu, unsafe_allow_html=True) # HIDE THE STREAMLIT MAIN MENU
-st.markdown(
-    """
-    <style>
-    [data-testid="stImage"] img,svg{
-     border-radius: 10px;
-    }
-
-    [data-testid="stChatMessage"]{
-    background-color:rgba(243,249,255,1);
-    font-size: 14px;
-    font-weight: normal;
-    }
-
-    [data-testid="stChatMessage"] p {
-    font-size: 14px;
-    font-weight: 550;
-    }
-
-    [data-testid="stChatMessage"] p, ol, ul, dl {
-    margin-bottom: 10px;
-    }
-    
-    div.block-container {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    padding-right: 2rem;
-    padding-left: 2rem;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
 
 # CREWAI: AGENT
 prompt_engineer_agent = Agent(
@@ -78,7 +50,7 @@ prompt_preparation = Task(
         3. **Instructions:** Specify the precise steps or actions the AI must undertake to complete the task successfully.
         4. **Constraints:** List any restrictions or rules that the AI must adhere to while performing the task.
         5. **Examples:** Provide concrete examples or scenarios that illustrate the task, helping to guide the AI’s responses and ensuring alignment with the desired outcomes.
-        6. **Output Format:** Clearly define the format in which the AI should present its output, ensuring clarity and usability.
+        6. **Output Format:** Think step by step and Clearly present the output in a format that will help the user achieve the task with minimal effort.
         7. **Evaluation Criteria:** Establish metrics or criteria to assess the AI’s performance, ensuring the quality and relevance of its output.
         
         IMPORTANT: MAKE SURE YOU ONLY OUTPUT THE PROMPT DELIMTED BY <PROMPT></PROMPT> Tag"""
@@ -122,7 +94,7 @@ def home_sidebar_content():
     return None
 
 # MAIN PAGE CONTENT
-def home_main_page_content(open_ai_key):
+def home_main_page_content():
     context_text = ''
     content = ''
 
@@ -131,16 +103,16 @@ def home_main_page_content(open_ai_key):
 
     ## SECTION1 - LEFT
     with col_ctnr_3_a:
-        st.write('**Enter your task:**')
+        st.write(':violet[**Enter your task:**]')
         task = st.text_area("**Please provide detailed information about the task you need help with:**", value="", height=20,help="Describe the task in detail to help us understand your needs better.")
-        st.write('**Additional Context:**')
+        st.write(':violet[**Additional Context:**]')
         context_text = st.text_area("**Need to provide more details? Simply type them into the text box below. If you have a document that adds context, you can easily upload it using the file uploader just beneath the text box.**", height=250)
         uploaded_file = st.file_uploader("Upload your context file here. We support CSV and TXT files.")
         req_btn_res = st.button("Submit",use_container_width=True)
 
     ## SECTION1 - LEFT
     with col_ctnr_3_b:
-        st.write('**Sample Input:** \n 1. Find the hardcoded value in the provided PySpark code. \n 2. Convert SQL code to PySpark code. \n 3. Write unit test cases for the uploaded code. \n 4. Create a user story for the specified task. \n 5. List tasks based on the uploaded architecture diagram. \n 6. Analyze performance bottlenecks in the existing codebase. \n 7. Suggest optimizations for database queries based on the schema. \n 8. Generate API documentation from the source code comments. \n 9. Prepare a migration strategy for upgrading from Python 2 to Python 3. \n 10. Design a security audit checklist for a web application.')
+        st.write(':violet[**Sample Input:**] \n 1. Find the hardcoded value in the provided PySpark code. \n 2. Convert SQL code to PySpark code. \n 3. Write unit test cases for the uploaded code. \n 4. Create a user story for the specified task. \n 5. List tasks based on the uploaded architecture diagram. \n 6. Analyze performance bottlenecks in the existing codebase. \n 7. Suggest optimizations for database queries based on the schema. \n 8. Generate API documentation from the source code comments. \n 9. Prepare a migration strategy for upgrading from Python 2 to Python 3. \n 10. Design a security audit checklist for a web application.')
     
     st.markdown("---")
 
@@ -173,7 +145,7 @@ def home_main_page_content(open_ai_key):
             else:
                 st.error("Unsupported file format!")
 
-        llm = ChatOpenAI(model="gpt-4o-mini-2024-07-18",api_key=open_ai_key)
+        llm = ChatOpenAI(model="gpt-4o-mini-2024-07-18")
         rag_chain = (
             prompt
             | llm
@@ -192,11 +164,11 @@ def home_main_page_content(open_ai_key):
 
         col_ctnr_4_a, col_ctnr_4_b = st.columns([2,4],gap="medium")
         with col_ctnr_4_a:
-            st.write("**Here's the detailed prompt generated for your task:**")
+            st.write(":violet[**Here's the detailed prompt generated for your task:**]")
             st.code(output_prompt)
                
         with col_ctnr_4_b:
-            st.write('**Final Output:**')
+            st.write(':violet[**Final Output:**]')
             st.write(res)
 
         # with st.expander("Here's the detailed prompt generated for your task:"):
@@ -215,11 +187,10 @@ def home_main_page_content(open_ai_key):
 if __name__ == "__main__":
 
     # SIDE BAR
-    open_ai_key = home_sidebar_content()
-    if open_ai_key is not None:
-        os.environ['OPENAI_API_KEY'] = open_ai_key
-
+    # open_ai_key = home_sidebar_content()
+    st.title(':gray[Effortlessly  execute your tasks with] :blue[  **Jeeni.ai**  ]')
+    st.markdown("---")
     st.write('')
 
     # MAIN PAGE
-    home_main_page_content(open_ai_key)
+    home_main_page_content()
