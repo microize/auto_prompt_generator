@@ -8,7 +8,10 @@ from crewai import Agent, Task, Crew
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_core.prompts import PromptTemplate, ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import StrOutputParser
- 
+
+os.environ['OPENAI_API_KEY'] = 'sk-xxxxxxxxxxxxxxxxxxxxxxxx'
+os.environ['OPENAI_API_MODEL'] = 'gpt-4o-mini-2024-07-18'
+
 # CSS TO HIDE THE STREAMLIT MENU
 hide_menu = """<style> p {font-weight: 600;} div.block-container{padding-top:3rem;padding-bottom:3rem;} header{ visibility: hidden; } footer{ visibility: hidden; } </style> """
 
@@ -213,6 +216,10 @@ if __name__ == "__main__":
 
     # SIDE BAR
     open_ai_key = home_sidebar_content()
+    if open_ai_key is not None:
+        os.environ['OPENAI_API_KEY'] = open_ai_key
+
+    st.write('')
 
     # MAIN PAGE
     home_main_page_content(open_ai_key)
