@@ -188,9 +188,8 @@ if __name__ == "__main__":
 
     # SIDE BAR
     # open_ai_key = home_sidebar_content()
-    st.title(':gray[Effortlessly  execute your tasks with] :blue[  **Jeeni.ai**  ]')
+    st.title(':gray[Effortlessly  execute your tasks with ] :blue[  **Jeeni.ai**  ]')
     st.markdown("---")
     st.write('')
-
     # MAIN PAGE
     home_main_page_content()
